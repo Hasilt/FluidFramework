@@ -26,7 +26,6 @@ import {
     ContainerWarning,
     ICriticalContainerError,
     AttachState,
-    ILoader,
     ILoaderOptions,
     LoaderHeader,
 } from "@fluidframework/container-definitions";
@@ -809,10 +808,6 @@ export class ContainerRuntime extends TypedEventEmitter<IContainerRuntimeEvents>
         return this.context.attachState;
     }
 
-    public get loader(): ILoader {
-        return this.context.loader;
-    }
-
     // Back compat: 0.28, can be removed in 0.29
     public readonly IFluidSerializer: IFluidSerializer;
 
@@ -1219,6 +1214,13 @@ export class ContainerRuntime extends TypedEventEmitter<IContainerRuntimeEvents>
 
     public get IFluidConfiguration(): IFluidConfiguration {
         return this.context.configuration;
+    }
+
+    public formRequestSummarizerFn(requestOptions: ISummarizerRequestOptions) {
+        return formRequestSummarizerFn(
+            this.context.loader,
+            this.deltaManager.lastSequenceNumber,
+            requestOptions);
     }
 
     /**
